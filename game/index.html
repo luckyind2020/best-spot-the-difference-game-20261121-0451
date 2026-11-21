@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Milo's Garden — Spot the Difference</title>
+<meta name="viewport" content="width=1280">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #f6ead3;
+    color: #5a3d24;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    min-height: 860px;
+  }
+  .wrap { width: 1280px; margin: 0 auto; padding: 22px 20px 18px; }
+  header {
+    display: flex; align-items: center; gap: 10px;
+    height: 74px; padding: 0 2px;
+  }
+  .brand { display: flex; align-items: center; gap: 8px; flex: none; }
+  .brand .face { font-size: 30px; line-height: 1; }
+  .brand h1 { font-size: 25px; margin: 0; letter-spacing: .5px; color: #7a4a21; white-space: nowrap; }
+  .round-label { font-size: 16px; font-weight: 600; color: #8a5a2e; white-space: nowrap; }
+  .timer-block { flex: 1; min-width: 180px; }
+  .timer-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; }
+  .timer-track {
+    height: 12px; border-radius: 6px; background: #e3cfa8;
+    overflow: hidden; margin-top: 4px;
+    border: 1px solid #c9a06a;
+  }
+  .timer-fill { height: 100%; width: 100%; background: #58a05c; border-radius: 6px; }
+  .timer-fill.low { background: #d94f3d; }
+  .chip {
+    background: #fff7e6; border: 2px solid #c9a06a; border-radius: 999px;
+    padding: 7px 12px; font-size: 16px; font-weight: 700; white-space: nowrap;
+  }
+  .chip b { color: #b3541e; }
+  button {
+    font-family: inherit; font-size: 15px; font-weight: 700; color: #fff7e6;
+    background: #b3541e; border: none; border-radius: 10px;
+    padding: 9px 13px; cursor: pointer; white-space: nowrap;
+  }
+  button:hover { background: #c9662c; }
+  button.secondary { background: #8a6a45; }
+  button.secondary:hover { background: #9d7a52; }
+  button:disabled { opacity: .45; cursor: default; }
+  .stage { position: relative; width: 1240px; height: 600px; margin-top: 12px; }
+  canvas { display: block; width: 1240px; height: 600px; border-radius: 12px; }
+  .overlay {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .overlay.hidden { display: none; }
+  .panel {
+    pointer-events: auto;
+    background: rgba(255, 248, 232, .94);
+    border: 3px solid #b3541e; border-radius: 18px;
+    padding: 28px 40px; text-align: center; max-width: 640px;
+    box-shadow: 0 8px 30px rgba(90, 61, 36, .25);
+  }
+  .panel h2 { margin: 0 0 10px; font-size: 34px; color: #7a4a21; }
+  .panel p { margin: 8px 0; font-size: 18px; line-height: 1.45; }
+  .panel .big { font-size: 44px; font-weight: 800; color: #b3541e; }
+  .panel button { font-size: 19px; padding: 13px 26px; margin-top: 12px; }
+  .banner {
+    pointer-events: none;
+    background: rgba(255, 248, 232, .92); border: 3px solid #b3541e; border-radius: 14px;
+    padding: 16px 30px; font-size: 26px; font-weight: 800; color: #7a4a21;
+  }
+  footer { margin-top: 16px; font-size: 15px; color: #8a6a45; text-align: center; }
+  footer b { color: #b3541e; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="face">🐱</span><h1>Milo&rsquo;s Garden</h1></div>
+    <div class="round-label" id="round-label">Round 1 / 3 &middot; Garden Morning</div>
+    <div class="timer-block">
+      <div class="timer-row"><span>Time left</span><span id="time-text">1:30</span></div>
+      <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
+    </div>
+    <div class="chip">Score <b id="score-val">0</b></div>
+    <div class="chip">Found <b id="found-val">0 / 7</b></div>
+    <button id="hint-btn" type="button">💡 Hint (3)</button>
+    <button id="sound-btn" type="button" class="secondary">🔊 Sound on</button>
+    <button id="restart-btn" type="button" class="secondary">↻ Restart</button>
+  </header>
+
+  <div class="stage">
+    <canvas id="game" width="1240" height="600"></canvas>
+    <div class="overlay" id="overlay"><div class="panel" id="overlay-panel"></div></div>
+  </div>
+
+  <footer>
+    Click a difference on <b>either</b> picture &mdash; find all 7 before time runs out.
+    A wrong click costs <b>20 points</b>. Keys: <b>Enter</b> start &middot; <b>H</b> hint &middot;
+    <b>M</b> sound &middot; <b>R</b> restart &middot; <b>P</b> pause.
+  </footer>
+</div>
+<script type="module" src="./src/boot.js"></script>
+</body>
+</html>
